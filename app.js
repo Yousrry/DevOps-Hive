@@ -1,13 +1,22 @@
 const axios = require('axios');
 const express = require('express');
-
 const app = express();
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 // setting the port as 3000 by default or as an environment variable 
 const PORT = process.env.PORT || 3000;
+const version = process.env.VERSION || "1.0.0";
 
-app.get("/", async (req, res) => {
+app.get("/", (req, res) => {
+  res.send("Hello World");
+});
+
+
+app.get("/version", (req, res) => {
+  res.send(`Version: ${version}`);
+});
+        
+app.get("/temprature", async (req, res) => {
   try {
     const response = await axios.get('https://api.opensensemap.org/boxes/63a1acee2d4180001b120d46');
     const data = response.data;
@@ -32,6 +41,8 @@ app.get("/", async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+
 // This code fetches data from the OpenSenseMap API and displays the current temperature on the webpage.
 // It uses Express to create a server and Axios to make HTTP requests.
 // The server listens on port 3000 or any port specified in the environment variables.
